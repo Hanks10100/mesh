@@ -1,5 +1,5 @@
 import { computeLayout } from './layout'
-import { getGridStyle } from './parser'
+import { getMeshStyle } from './parser'
 
 function getChildren (children) {
   if (Array.isArray(children)) {
@@ -11,7 +11,7 @@ function getChildren (children) {
 function install (Vue) {
   Vue.component('mesh', {
     name: 'mesh',
-    // functional: true,
+    functional: true,
     props: {
       width: {
         type: Number,
@@ -26,12 +26,17 @@ function install (Vue) {
         type: Array,
         required: true,
         default: []
+      },
+      gap: {
+        type: Number,
+        default: 0
       }
     },
 
-    render (h) {
-      const { wrapperStyle, layoutStyle } = getGridStyle(this, computeLayout(this))
-      const children = getChildren(this.$slots.default)
+    render (h, context) {
+      const props = context.props
+      const { wrapperStyle, layoutStyle } = getMeshStyle(props, computeLayout(props))
+      const children = getChildren(context.children)
       children.forEach((vnode, i) => {
         vnode.data.staticStyle = layoutStyle[i]
       })
