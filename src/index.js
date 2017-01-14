@@ -1,4 +1,3 @@
-import { computeLayout } from './layout'
 import { getMeshStyle } from './parser'
 
 function getChildren (children) {
@@ -22,7 +21,7 @@ function install (Vue) {
         default: 12
       },
       layout: {
-        type: Array,
+        type: [Array, String],
         required: true,
         default: []
       },
@@ -33,7 +32,7 @@ function install (Vue) {
     },
 
     render (h, context) {
-      const { wrapperStyle, layoutStyle } = getMeshStyle(this, computeLayout(this))
+      const { wrapperStyle, layoutStyle } = getMeshStyle(this)
       const children = getChildren(this.$slots.default)
       return h('div', { staticStyle: wrapperStyle }, children.map((vnode, i) => {
         vnode.data.staticStyle = layoutStyle[i]
