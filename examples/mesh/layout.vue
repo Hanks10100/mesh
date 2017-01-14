@@ -1,22 +1,12 @@
 <template>
   <div class="wrapper">
-    <mesh class="mesh" column="3" :layout="layout" v-once>
+    <mesh class="mesh" column="3" layout="2,1|1,2|2,1" v-once>
       <div class="box"><text class="text">A</text></div>
       <div class="box"><text class="text">B</text></div>
       <div class="box"><text class="text">C</text></div>
     </mesh>
   </div>
 </template>
-
-<script>
-  export default {
-    data () {
-      return {
-        layout: [[2,1],[1,2],[2,1]]
-      }
-    }
-  }
-</script>
 
 <style scoped>
   .wrapper {
