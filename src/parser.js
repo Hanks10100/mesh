@@ -5,12 +5,17 @@ function unit (number) {
   return number
 }
 
+function createBorder (border, styles) {
+  //
+}
+
 // 根据属性值计算布局样式
 export function getMeshStyle (props, origins) {
   const width = Number(props.width) || 750
   const column = Number(props.column) || 12
   const layout = props.layout || []
   const gap = Number(props.gap) || 0
+  const border = props.border
 
   const ratio = (width + gap) / column
 
@@ -27,7 +32,8 @@ export function getMeshStyle (props, origins) {
   // 计算布局样式
   const layoutStyle = layout.map((size, index) => {
     const coord = origins[index]
-    return {
+
+    const boxStyle = {
       position: 'absolute',
       justifyContent: 'center',
       alignItems: 'center',
@@ -36,6 +42,17 @@ export function getMeshStyle (props, origins) {
       width : unit(size[0] * ratio - gap),
       height: unit(size[1] * ratio - gap)
     }
+
+    // 给网格添加边框
+    if (border) {
+      const { width, style = 'solid', color = '#000', radius } = border;
+      const borderStyle = `${unit(width)} ${style} ${color}`;
+      if (width && coord.x > 0) boxStyle.borderLeft = borderStyle;
+      if (width && coord.y > 0) boxStyle.borderTop  = borderStyle;
+      if (radius) boxStyle.borderRadius = radius;
+    }
+
+    return boxStyle;
   })
 
   return { wrapperStyle, layoutStyle }

@@ -11,7 +11,6 @@ function getChildren (children) {
 function install (Vue) {
   Vue.component('mesh', {
     name: 'mesh',
-    functional: true,
     props: {
       width: {
         type: Number,
@@ -34,13 +33,17 @@ function install (Vue) {
     },
 
     render (h, context) {
-      const props = context.props
-      const { wrapperStyle, layoutStyle } = getMeshStyle(props, computeLayout(props))
-      const children = getChildren(context.children)
-      children.forEach((vnode, i) => {
+      const { wrapperStyle, layoutStyle } = getMeshStyle(this, computeLayout(this))
+      const children = getChildren(this.$slots.default)
+      return h('div', { staticStyle: wrapperStyle }, children.map((vnode, i) => {
         vnode.data.staticStyle = layoutStyle[i]
-      })
-      return h('div', { staticStyle: wrapperStyle }, children)
+        const options = vnode.componentOptions
+        if (options.tag === 'mesh') {
+          if (!options.propsData) options.propsData = {}
+          options.propsData.width = parseFloat(layoutStyle[i].width)
+        }
+        return vnode
+      }))
     }
   })
 }
