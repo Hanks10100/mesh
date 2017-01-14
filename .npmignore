@@ -1,0 +1,9 @@
+build/
+dist/
+doc/
+examples/
+node_modules/
+src/
+.babelrc
+.gitignore
+index.html
