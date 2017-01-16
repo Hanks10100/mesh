@@ -32,8 +32,6 @@ export function getMeshStyle (props) {
     },
     layoutStyle: layout.map((size, i) => ({
       position: 'absolute',
-      justifyContent: 'center',
-      alignItems: 'center',
       top: unit(origins[i].y * ratio),
       left: unit(origins[i].x * ratio),
       width: unit(size[0] * ratio - gap),
