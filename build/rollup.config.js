@@ -5,7 +5,6 @@ export default {
   entry: './src/mesh.js',
   dest: './index.js',
   format: 'umd',
-  sourceMap: 'inline',
   plugins: [
     buble()
   ]
