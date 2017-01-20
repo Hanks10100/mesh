@@ -9,7 +9,7 @@
   "scripts": {
     "build:examples": "webpack --config build/webpack.examples.config.js",
     "dev:examples": "webpack --watch --config build/webpack.examples.config.js",
-    "build": "rollup -c build/rollup.config.js",
+    "build": "rollup -c build/rollup.config.js && npm run build:examples",
     "dev": "rollup -w -c build/rollup.config.js",
     "serve": "serve -p 8080",
     "test": "echo \"Error: no test specified\" && exit 1"

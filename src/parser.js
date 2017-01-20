@@ -1,10 +1,10 @@
 import { computeLayout } from './layout'
 
 export function unit (number) {
-  if (Number(number) !== 0 && typeof WXEnvironment === 'object' && WXEnvironment.platform === 'Web') {
-    return number + 'px'
+  if (typeof WXEnvironment === 'object' && WXEnvironment.platform !== 'Web') {
+    return Number(number)
   }
-  return Number(number)
+  return number + 'px'
 }
 
 // parse string layout param
