@@ -8,16 +8,8 @@ function filterChildren (children) {
   return []
 }
 
-function extend (to, _from) {
-  for (const key in _from) {
-    to[key] = _from[key]
-  }
-  return to
-}
-
 function install (Vue) {
   Vue.component('mesh', {
-    name: 'mesh',
     props: {
       width: [Number, String], // default 750
       column: [Number, String], // default 12
@@ -35,7 +27,7 @@ function install (Vue) {
         'div',
         { staticStyle: wrapperStyle },
         filterChildren(this.$slots.default).map((vnode, i) => {
-          vnode.data.staticStyle = extend(vnode.data.staticStyle || {}, layoutStyle[i])
+          vnode.data.staticStyle = Vue.util.extend(vnode.data.staticStyle || {}, layoutStyle[i])
 
           // support nested mesh
           const options = vnode.componentOptions
@@ -43,6 +35,7 @@ function install (Vue) {
             if (!options.propsData) options.propsData = {}
             options.propsData.width = parseFloat(layoutStyle[i].width)
           }
+
           return vnode
         })
       )
