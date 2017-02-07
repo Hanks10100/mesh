@@ -1,0 +1,10 @@
+machine:
+  node:
+    version: 7
+test:
+  override:
+    - npm run test
+
+dependencies:
+  cache_directories:
+    - "node_modules"
