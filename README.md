@@ -2,7 +2,7 @@
 
 一个网格式布局组件，基于 Vue 2.0 实现，兼容 Weex 平台。
 
-> CSS 里已经有了[网格布局]()的规范，但是学习难度很大，有一二十个属性。而且 CSS 语法的表达能力有限，描述这种复杂布局，的确有点难为它了。
+> CSS 里已经有了[网格布局](https://www.w3.org/TR/css-grid-1/)的规范，但是学习难度很大，有一二十个属性。而且 CSS 语法的表达能力有限，描述这种复杂布局，的确有点难为它了。
 
 因为和 grid 规范不一样，所以暂且将组件命名成 mesh。
 
@@ -12,25 +12,34 @@
 
 ![Mesh Example](./images/mesh-example.png)
 
-用 CSS 写，是这样的：
+用 CSS 写是这样的（[CodePen](http://codepen.io/Hanks10100/pen/ggjKzY)）：
 
 ```html
 <div class="container">
-  <div class="box-a">A</div>
-  <div class="box-b">B</div>
-  <div class="box-c">C</div>
+  <div class="a">A</div>
+  <div class="b">B</div>
+  <div class="c">C</div>
 </div>
 
 <style>
-/* 仅包含了 grid 相关的样式 */
-
+/* 仅保留了 grid 相关的样式 */
 .container {
+  display: grid;
+  width: 300px;
+  grid-template-columns: 100px 100px 100px;
+  grid-template-rows: 100px 100px;
 }
-.box-a {
+.a {
+  grid-column: 1 / 3;
+  grid-row: 1;
 }
-.box-b {
+.b {
+  grid-column: 3;
+  grid-row: 1 / 3;
 }
-.box-c {
+.c {
+  grid-column: 1 / 3;
+  grid-row: 2 ;
 }
 </style>
 ```
@@ -39,7 +48,7 @@
 
 ```html
 <!-- 省略了组件样式 -->
-<mesh column="3" layout="2,1|1,2|2,1">
+<mesh width="300" column="3" layout="2,1|1,2|2,1">
   <div>A</div>
   <div>B</div>
   <div>C</div>
@@ -50,6 +59,7 @@
 
 ```CSS
 .container {
+  width: 300px;
   mesh-column: 3;
   mesh-layout: "2,1|1,2|2,1";
 }
@@ -57,7 +67,7 @@
 
 ### 更多布局效果
 
-~~还有很多更神器的布局效果。~~
+参考 [examples](./examples/) 目录下的各种例子。
 
 ## 使用方法
 
