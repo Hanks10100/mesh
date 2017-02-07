@@ -1,6 +1,7 @@
 import { computeLayout } from './layout'
 
 export function unit (number) {
+  if (!number) return 0
   if (typeof WXEnvironment === 'object' && WXEnvironment.platform !== 'Web') {
     return Number(number)
   }
