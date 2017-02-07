@@ -1,14 +1,8 @@
-# Mesh Component For Weex and Vue
+# 网格式布局组件
 
-一个网格式布局组件，基于 Vue 实现，兼容 Weex 平台。
+一个网格式布局组件，基于 Vue 2.0 实现，兼容 Weex 平台。
 
-## 为何存在
-
-CSS 里已经有了[网格布局]()的规范，但是学习难度很大，有一二十个属性。而且 CSS 语法的表达能力有限，描述这种复杂布局，的确有点难为它了。
-
-不过这种网格式的布局也有应用场景。
-
-![]()
+> CSS 里已经有了[网格布局]()的规范，但是学习难度很大，有一二十个属性。而且 CSS 语法的表达能力有限，描述这种复杂布局，的确有点难为它了。
 
 因为和 grid 规范不一样，所以暂且将组件命名成 mesh。
 
@@ -16,27 +10,32 @@ CSS 里已经有了[网格布局]()的规范，但是学习难度很大，有一
 
 如果想实现如下布局效果：
 
-![]()
+![Mesh Example](./images/mesh-example.png)
 
 用 CSS 写，是这样的：
 
 ```html
-<div class="wrapper">
-  <div class="cell-a">A</div>
-  <div class="cell-b">B</div>
-  <div class="cell-c">C</div>
+<div class="container">
+  <div class="box-a">A</div>
+  <div class="box-b">B</div>
+  <div class="box-c">C</div>
 </div>
 
 <style>
-/* 省略了部分样式 */
-.wrapper {
+/* 仅包含了 grid 相关的样式 */
+
+.container {
 }
-.cell {
+.box-a {
+}
+.box-b {
+}
+.box-c {
 }
 </style>
 ```
 
-如果使用 `<mesh>` 组件写就是：
+如果使用 `<mesh>` 组件写是这样的：
 
 ```html
 <!-- 省略了组件样式 -->
@@ -47,16 +46,10 @@ CSS 里已经有了[网格布局]()的规范，但是学习难度很大，有一
 </mesh>
 ```
 
-如果能把它转换成 CSS 的话，可以写成：
+如果能把它转换成 CSS 的话，可以写成（自创语法，用来做对比，没有浏览器兼容）：
 
 ```CSS
-.wrapper {
-  column: 3;
-  layout: "2,1|1,2|2,1";
-}
-
-/* 或者 */
-.wrapper {
+.container {
   mesh-column: 3;
   mesh-layout: "2,1|1,2|2,1";
 }
@@ -64,18 +57,18 @@ CSS 里已经有了[网格布局]()的规范，但是学习难度很大，有一
 
 ### 更多布局效果
 
-还有很多更神器的布局效果。
+~~还有很多更神器的布局效果。~~
 
 ## 使用方法
 
-代码写成了 Vue 的插件。
+代码封装成了 [Vue 插件](https://vuejs.org/v2/guide/plugins.html)，使用 `Vue.use` 安装（在浏览器环境中会自动安装）。
 
 ```js
 import mesh from 'weex-component-mesh'
 Vue.use(mesh)
 ```
 
-插件会在全局注册 mesh 组件，和正常 Vue 组件一样使用即可。
+安装之后会在全局注册 `<mesh>` 组件，和正常 Vue 组件一样使用即可。
 
 ### 组件属性
 
@@ -103,9 +96,29 @@ Vue.use(mesh)
 
 ##### 组件顺序
 
-组件遵循 **“最靠上且最靠左”** 的原则排列，排列顺序参考下图。
+组件遵循 **“最靠上且最靠左”** 的原则排列，排列顺序参考下图（`column = 12` `layout = "10,2 | 3,3 | 3,3 | 4,2 | 4,3 | 6,2"`）：
+
+![Mesh Order](./images/mesh-order.png)
 
 ### 组件嵌套
+
+mesh 组件支持嵌套：
+
+```html
+<mesh width="640" column="4" layout="4,1|1,3|3,3">
+  <div>A</div>
+  <div>B</div>
+  <mesh column="2" layout="2,1|1,1|1,1">
+    <div>C</div>
+    <div>D</div>
+    <div>E</div>
+  </mesh>
+</mesh>
+```
+
+效果如下图：
+
+![Nested Mesh](./images/nested-mesh.png)
 
 ## 注意事项
 
