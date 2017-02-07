@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <mesh class="mesh" column="3" :layout="layout" v-once>
+    <mesh width="640" column="3" :layout="layout" v-once>
       <div class="box"><text class="text">A</text></div>
       <div class="box"><text class="text">B</text></div>
       <div class="box"><text class="text">C</text></div>
@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         layout: [[2,1],[1,2],[2,1]]
       }
@@ -22,14 +22,18 @@
   .wrapper {
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
   .box {
-    border-width: 5px;
+    border-width: 2px;
     border-style: solid;
-    border-color: #DDD;
+    border-color: #BBB;
+    justify-content: center;
+    align-items: center;
   }
   .text {
     color: #1B90F7;
-    font-size: 60px;
+    font-size: 80px;
+    text-align: center;
   }
 </style>
