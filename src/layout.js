@@ -22,14 +22,15 @@ export function xor (A, B) {
 export function getOrigin (boundary) {
   let x = Number.MAX_VALUE
   let y = Number.MAX_VALUE
-  boundary.forEach(point => {
+  for (let i = 0; i < boundary.length; ++i) {
+    const point = boundary[i]
     if (point[1] < y) {
       x = point[0]
       y = point[1]
     } else if (point[1] === y) {
       x = (point[0] < x) ? point[0] : x
     }
-  })
+  }
   return [x, y]
 }
 
@@ -39,11 +40,10 @@ export function computeLayout (column, layout) {
   let origin = [0, 0]
   let boundary = [origin, [Number(column), 0]]
 
-  layout.forEach(vector => {
-    boundary = xor(boundary, getCoord(origin, vector))
-    origin = getOrigin(boundary)
-    coords.push(origin)
-  })
+  for (let i = 0; i < layout.length; ++i) {
+    boundary = xor(boundary, getCoord(origin, layout[i]))
+    coords[i+1] = origin = getOrigin(boundary)
+  }
 
   return coords
 }
