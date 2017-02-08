@@ -6,6 +6,12 @@
 
 因为和 grid 规范不一样，所以暂且将组件命名成 mesh。
 
+## 实现目标
+
++ 能够方便的写复杂布局，借鉴了 CSS Grid 布局规范。
++ 减少标签的嵌套层次，能够优化移动端的渲染性能。
++ 不依赖 CSS 实现，没有 CSS 的解析负担。
+
 ## 布局效果
 
 如果想实现如下布局效果：
@@ -47,7 +53,6 @@
 如果使用 `<mesh>` 组件写是这样的：
 
 ```html
-<!-- 省略了组件样式 -->
 <mesh width="300" column="3" layout="2,1|1,2|2,1">
   <div>A</div>
   <div>B</div>
@@ -64,10 +69,6 @@
   mesh-layout: "2,1|1,2|2,1";
 }
 ```
-
-### 更多布局效果
-
-参考 [examples](./examples/) 目录下的各种例子。
 
 ## 使用方法
 
@@ -106,7 +107,9 @@ Vue.use(mesh)
 
 ##### 组件顺序
 
-组件遵循 **“最靠上且最靠左”** 的原则排列，排列顺序参考下图（`column = 12` `layout = "10,2 | 3,3 | 3,3 | 4,2 | 4,3 | 6,2"`）：
+组件遵循 **“最靠上且最靠左”** 的原则排列，排列顺序参考下图。
+
+`column = 12` `layout = "10,2 | 3,3 | 3,3 | 4,2 | 4,3 | 6,2"`：
 
 ![Mesh Order](./images/mesh-order.png)
 
@@ -129,6 +132,18 @@ mesh 组件支持嵌套：
 效果如下图：
 
 ![Nested Mesh](./images/nested-mesh.png)
+
+## 更多布局效果
+
+![Mesh Features](./images/mesh-features.jpg)
+
+![Animation](./images/animation.gif)
+
+![Complex Layout](./images/complex.png)
+
+![Complex Nested](./images/complex-nested.png)
+
+参考 [examples](./examples/) 目录下的例子。
 
 ## 注意事项
 
