@@ -6,6 +6,13 @@
   "directories": {
     "example": "examples"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Hanks10100/weex-component-mesh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hanks10100/weex-component-mesh/issues"
+  },
   "scripts": {
     "build:examples": "webpack --config build/webpack.examples.config.js",
     "dev:examples": "webpack --watch --config build/webpack.examples.config.js",
