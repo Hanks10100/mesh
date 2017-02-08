@@ -1,13 +1,13 @@
 export function isEqual (pa, pb) {
-  return pa.x === pb.x && pa.y === pb.y
+  return pa[0] === pb[0] && pa[1] === pb[1]
 }
 
 export function getCoord (point, vector) {
   return [
-    { x: point.x, y: point.y },
-    { x: point.x + vector[0], y: point.y },
-    { x: point.x, y: point.y + vector[1] },
-    { x: point.x + vector[0], y: point.y + vector[1] }
+    [point[0], point[1]],
+    [point[0] + vector[0], point[1]],
+    [point[0], point[1] + vector[1]],
+    [point[0] + vector[0], point[1] + vector[1]]
   ]
 }
 
@@ -23,21 +23,21 @@ export function getOrigin (boundary) {
   let x = Number.MAX_VALUE
   let y = Number.MAX_VALUE
   boundary.forEach(point => {
-    if (point.y < y) {
-      x = point.x
-      y = point.y
-    } else if (point.y === y) {
-      x = (point.x < x) ? point.x : x
+    if (point[1] < y) {
+      x = point[0]
+      y = point[1]
+    } else if (point[1] === y) {
+      x = (point[0] < x) ? point[0] : x
     }
   })
-  return { x, y }
+  return [x, y]
 }
 
 // Caculate the origins of the layout
 export function computeLayout (column, layout) {
-  const coords = [{ x: 0, y: 0 }]
-  let origin = { x: 0, y: 0 }
-  let boundary = [origin, { x: Number(column), y: 0 }]
+  const coords = [[0, 0]]
+  let origin = [0, 0]
+  let boundary = [origin, [Number(column), 0]]
 
   layout.forEach(vector => {
     boundary = xor(boundary, getCoord(origin, vector))

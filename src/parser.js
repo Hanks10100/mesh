@@ -29,12 +29,12 @@ export function getMeshStyle (props) {
     wrapperStyle: {
       position: 'relative',
       width: unit(width),
-      height: unit(origins.pop().y * ratio - gap)
+      height: unit(origins.pop()[1] * ratio - gap)
     },
     layoutStyle: layout.map((size, i) => ({
       position: 'absolute',
-      top: unit(origins[i].y * ratio),
-      left: unit(origins[i].x * ratio),
+      top: unit(origins[i][1] * ratio),
+      left: unit(origins[i][0] * ratio),
       width: unit(size[0] * ratio - gap),
       height: unit(size[1] * ratio - gap)
     }))
