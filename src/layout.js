@@ -1,49 +1,54 @@
 export function isEqual (pa, pb) {
-  return pa.x === pb.x && pa.y === pb.y
+  return pa[0] === pb[0] && pa[1] === pb[1]
 }
 
-export function getCoord (point, vector) {
+export function rect (point, vector) {
   return [
-    { x: point.x, y: point.y },
-    { x: point.x + vector[0], y: point.y },
-    { x: point.x, y: point.y + vector[1] },
-    { x: point.x + vector[0], y: point.y + vector[1] }
+    [point[0], point[1]],
+    [point[0] + vector[0], point[1]],
+    [point[0], point[1] + vector[1]],
+    [point[0] + vector[0], point[1] + vector[1]]
   ]
 }
 
-// AΔB = (A - B)∪(B - A)
-export function xor (A, B) {
-  return []
-    .concat(A.filter(a => B.every(b => !isEqual(a, b))))
-    .concat(B.filter(b => A.every(a => !isEqual(a, b))))
+// Caculate the difference of two sets
+function diff (A, B) {
+  return A.filter(a => B.every(b => !isEqual(a, b)))
 }
 
-// Caculate the next origin
-export function getOrigin (boundary) {
+// Caculate the symmetric difference of two sets
+// AΔB = (A - B)∪(B - A)
+export function xor (A, B) {
+  return diff(A, B).concat(diff(B, A))
+}
+
+export function nextOrigin (boundary) {
   let x = Number.MAX_VALUE
   let y = Number.MAX_VALUE
-  boundary.forEach(point => {
-    if (point.y < y) {
-      x = point.x
-      y = point.y
-    } else if (point.y === y) {
-      x = (point.x < x) ? point.x : x
+
+  for (let i = 0; i < boundary.length; ++i) {
+    const point = boundary[i]
+    if (point[1] < y) {
+      x = point[0]
+      y = point[1]
+    } else if (point[1] === y) {
+      x = (point[0] < x) ? point[0] : x
     }
-  })
-  return { x, y }
+  }
+
+  return [x, y]
 }
 
 // Caculate the origins of the layout
 export function computeLayout (column, layout) {
-  const coords = [{ x: 0, y: 0 }]
-  let origin = { x: 0, y: 0 }
-  let boundary = [origin, { x: Number(column), y: 0 }]
+  let origin = [0, 0]
+  let boundary = [origin, [Number(column), 0]]
 
-  layout.forEach(vector => {
-    boundary = xor(boundary, getCoord(origin, vector))
-    origin = getOrigin(boundary)
-    coords.push(origin)
-  })
+  const coords = [[0, 0]]
+  for (let i = 0; i < layout.length; ++i) {
+    boundary = xor(boundary, rect(origin, layout[i]))
+    coords[i+1] = origin = nextOrigin(boundary)
+  }
 
   return coords
 }
