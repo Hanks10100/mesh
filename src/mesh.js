@@ -43,9 +43,9 @@ function install (Vue) {
   })
 }
 
-// auto install in browser
-if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue)
+// auto install
+if (typeof Vue === 'function') {
+  install(Vue)
 }
 
 export default {
