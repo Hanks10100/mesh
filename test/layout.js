@@ -1,12 +1,12 @@
 import { expect } from 'chai'
-import { isEqual, getCoord, xor, getOrigin, computeLayout } from '../src/layout'
+import { isEqual, rect, xor, nextOrigin, computeLayout } from '../src/layout'
 
 describe('layout', () => {
   it('exports', () => {
     expect(isEqual).to.be.a.function
-    expect(getCoord).to.be.a.function
+    expect(rect).to.be.a.function
     expect(xor).to.be.a.function
-    expect(getOrigin).to.be.a.function
+    expect(nextOrigin).to.be.a.function
     expect(computeLayout).to.be.a.function
   })
 
@@ -19,20 +19,20 @@ describe('layout', () => {
     expect(isEqual([1, 2], [3, 4])).to.be.false
   })
 
-  it('getCoord', () => {
-    expect(getCoord([0, 0], [0, 0])).to.be.deep.equal([
+  it('rect', () => {
+    expect(rect([0, 0], [0, 0])).to.be.deep.equal([
       [0, 0],
       [0, 0],
       [0, 0],
       [0, 0]
     ])
-    expect(getCoord([0, 0], [1, 2])).to.be.deep.equal([
+    expect(rect([0, 0], [1, 2])).to.be.deep.equal([
       [0, 0],
       [1, 0],
       [0, 2],
       [1, 2]
     ])
-    expect(getCoord([1, 2], [3, 4])).to.be.deep.equal([
+    expect(rect([1, 2], [3, 4])).to.be.deep.equal([
       [1, 2],
       [4, 2],
       [1, 6],
@@ -55,16 +55,16 @@ describe('layout', () => {
     expect(xor([a, b, c], [d, e])).to.deep.equal([a, b, c, d, e])
   })
 
-  it('getOrigin', () => {
-    expect(getOrigin([[0,0]])).to.deep.equal([0, 0])
-    expect(getOrigin([[0,0], [1,0]])).to.deep.equal([0, 0])
-    expect(getOrigin([[0,2], [1,0], [2,1]])).to.deep.equal([1, 0])
-    expect(getOrigin([[0,1], [1,0], [2,2]])).to.deep.equal([1, 0])
-    expect(getOrigin([[0,1], [1,2], [2,2]])).to.deep.equal([0, 1])
-    expect(getOrigin([[0,2], [1,0], [2,1], [3,3]])).to.deep.equal([1, 0])
-    expect(getOrigin([[0,2], [1,3], [2,1], [3,0]])).to.deep.equal([3, 0])
-    expect(getOrigin([[0,2], [1,3], [2,2], [3,2]])).to.deep.equal([0, 2])
-    expect(getOrigin([[1,2], [1,0], [2,2], [3,2]])).to.deep.equal([1, 0])
+  it('nextOrigin', () => {
+    expect(nextOrigin([[0,0]])).to.deep.equal([0, 0])
+    expect(nextOrigin([[0,0], [1,0]])).to.deep.equal([0, 0])
+    expect(nextOrigin([[0,2], [1,0], [2,1]])).to.deep.equal([1, 0])
+    expect(nextOrigin([[0,1], [1,0], [2,2]])).to.deep.equal([1, 0])
+    expect(nextOrigin([[0,1], [1,2], [2,2]])).to.deep.equal([0, 1])
+    expect(nextOrigin([[0,2], [1,0], [2,1], [3,3]])).to.deep.equal([1, 0])
+    expect(nextOrigin([[0,2], [1,3], [2,1], [3,0]])).to.deep.equal([3, 0])
+    expect(nextOrigin([[0,2], [1,3], [2,2], [3,2]])).to.deep.equal([0, 2])
+    expect(nextOrigin([[1,2], [1,0], [2,2], [3,2]])).to.deep.equal([1, 0])
   })
 
   it('computeLayout', () => {
