@@ -26,10 +26,13 @@ function parseOrders (props, children) {
   }
 
   children.reduce((index, vnode, i) => {
-    const order = Number(pick(vnode, 'mesh-order') || pick(vnode, 'meshOrder'))
-    order && orders.splice(i, 1, order)
-    return order || (index + 1)
-  }, 1)
+    const prop = pick(vnode, 'mesh-order') || pick(vnode, 'meshOrder')
+    const order = Number(prop) || (index + 1)
+    if (prop || !orders[i]) {
+      orders.splice(i, 1, order)
+    }
+    return order
+  }, 0)
 
   return orders
 }
