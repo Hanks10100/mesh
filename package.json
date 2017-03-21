@@ -24,7 +24,7 @@
     "dev:react": "node build/build.js react-mesh --watch",
     "build": "npm run build:weex && npm run build:vue && npm run build:react && webpack",
     "dev": "npm run dev:weex",
-    "test": "mocha --require reify test",
+    "test": "mocha --require reify test/*",
     "serve": "serve -p 8080"
   },
   "keywords": [
