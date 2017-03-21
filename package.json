@@ -15,9 +15,15 @@
   },
   "scripts": {
     "build:examples": "webpack",
+    "build:weex": "node build/build.js weex-component-mesh",
+    "build:vue": "node build/build.js vue-mesh",
+    "build:react": "node build/build.js react-mesh",
     "dev:examples": "webpack --watch",
-    "build": "rollup -c && webpack",
-    "dev": "rollup -w -c",
+    "dev:weex": "node build/build.js weex-component-mesh --watch",
+    "dev:vue": "node build/build.js vue-mesh --watch",
+    "dev:react": "node build/build.js react-mesh --watch",
+    "build": "npm run build:weex && npm run build:vue && npm run build:react && webpack",
+    "dev": "npm run dev:weex",
     "test": "mocha --require reify test",
     "serve": "serve -p 8080"
   },
