@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Hanks10100/weex-component-mesh.git"
+    "url": "git@github.com:Hanks10100/mesh.git"
   },
   "bugs": {
-    "url": "https://github.com/Hanks10100/weex-component-mesh/issues"
+    "url": "https://github.com/Hanks10100/mesh/issues"
   },
   "scripts": {
     "build:examples": "webpack",
@@ -34,7 +34,7 @@
     "mesh"
   ],
   "author": "Hanks <zhanghan.me@gmail.com>",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",

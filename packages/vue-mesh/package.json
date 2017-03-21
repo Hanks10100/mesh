@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Hanks10100/weex-component-mesh.git"
+    "url": "git@github.com:Hanks10100/mesh.git"
   },
   "bugs": {
-    "url": "https://github.com/Hanks10100/weex-component-mesh/issues"
+    "url": "https://github.com/Hanks10100/mesh/issues"
   },
   "keywords": [
     "weex",
