@@ -16,10 +16,11 @@ export function parseLayout (layout) {
   return Array.isArray(layout) ? layout : []
 }
 
-export function getMeshStyle (props) {
+export function getMeshStyle (props, _orders) {
   const width = Number(props.width) || 750
   const column = Number(props.column) || 12
   const layout = parseLayout(props.layout || [])
+  const orders = _orders || layout.map((_, i) => i + 1)
   const gap = Number(props.gap) || 0
 
   const ratio = (width + gap) / column
@@ -31,12 +32,12 @@ export function getMeshStyle (props) {
       width: unit(width),
       height: unit(origins.pop()[1] * ratio - gap)
     },
-    layoutStyle: layout.map((size, i) => ({
+    layoutStyle: orders.map(i => ({
       position: 'absolute',
-      top: unit(origins[i][1] * ratio),
-      left: unit(origins[i][0] * ratio),
-      width: unit(size[0] * ratio - gap),
-      height: unit(size[1] * ratio - gap)
+      top: unit(origins[i-1][1] * ratio),
+      left: unit(origins[i-1][0] * ratio),
+      width: unit(layout[i-1][0] * ratio - gap),
+      height: unit(layout[i-1][1] * ratio - gap)
     }))
   }
 }

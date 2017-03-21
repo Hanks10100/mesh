@@ -8,12 +8,39 @@ function filterChildren (children) {
   return []
 }
 
+function pick (vnode, attr) {
+  const attrs = vnode.data.attrs
+  if (attrs && attrs[attr]) {
+    return attrs[attr]
+  }
+  return null
+}
+
+function parseOrders (props, children) {
+  if (!Array.isArray(children)) return
+
+  let orders = Array.isArray(props.orders) ? props.orders : []
+
+  if (typeof props.orders === 'string') {
+    orders = props.orders.split(/\s*\,\s*/).map(Number)
+  }
+
+  children.reduce((index, vnode, i) => {
+    const order = Number(pick(vnode, 'mesh-order') || pick(vnode, 'meshOrder'))
+    order && orders.splice(i, 1, order)
+    return order || (index + 1)
+  }, 1)
+
+  return orders
+}
+
 function install (Vue) {
   Vue.component('mesh', {
     props: {
       width: [Number, String], // default 750
       column: [Number, String], // default 12
       gap: [Number, String], // default 0
+      orders: [Array, String],
       layout: {
         type: [Array, String],
         required: true,
@@ -22,11 +49,12 @@ function install (Vue) {
     },
 
     render (createElement) {
-      const { wrapperStyle, layoutStyle } = getMeshStyle(this)
+      const children = filterChildren(this.$slots.default)
+      const { wrapperStyle, layoutStyle } = getMeshStyle(this, parseOrders(this, children))
       return createElement(
         'div',
         { staticStyle: wrapperStyle },
-        filterChildren(this.$slots.default).map((vnode, i) => {
+        children.map((vnode, i) => {
           vnode.data.staticStyle = Vue.util.extend(vnode.data.staticStyle || {}, layoutStyle[i])
 
           // support nested mesh
