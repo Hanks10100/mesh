@@ -1,7 +1,7 @@
 /**
- * react-mesh v0.2.0
+ * react-mesh v0.3.0
  * Author: Hanks <zhanghan.me@gmail.com>
- * Build: 2017-03-21 20:01
+ * Build: 2017-03-21 20:20
  */
 
 (function (global, factory) {

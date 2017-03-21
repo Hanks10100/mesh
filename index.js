@@ -1,7 +1,7 @@
 /**
- * weex-component-mesh v0.2.0
+ * weex-component-mesh v0.3.0
  * Author: Hanks <zhanghan.me@gmail.com>
- * Build: 2017-03-21 19:47
+ * Build: 2017-03-21 20:19
  */
 
 (function (global, factory) {

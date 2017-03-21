@@ -1,6 +1,6 @@
 {
   "name": "vue-mesh",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Vue mesh component",
   "main": "index.js",
   "directories": {
