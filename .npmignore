@@ -1,9 +1,12 @@
 build/
 dist/
 doc/
+images/
 examples/
+packages/
 node_modules/
 src/
+test/
 .babelrc
 .gitignore
 index.html
