@@ -3,6 +3,11 @@ const replace = require('rollup-plugin-replace')
 const buble = require('rollup-plugin-buble')
 
 const configs = {
+  'weex-component-mesh': {
+    moduleName: 'WeexMeshComponent',
+    entry: absolute('src/entries/vue.js'),
+    dest: absolute('index.js')
+  },
   'vue-mesh': {
     moduleName: 'VueMeshComponent',
     entry: absolute('src/entries/vue.js'),
