@@ -1,0 +1,24 @@
+{
+  "name": "vue-mesh",
+  "version": "0.2.0",
+  "description": "Vue mesh component",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Hanks10100/weex-component-mesh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hanks10100/weex-component-mesh/issues"
+  },
+  "keywords": [
+    "weex",
+    "vue",
+    "component",
+    "mesh"
+  ],
+  "author": "Hanks <zhanghan.me@gmail.com>",
+  "license": "MIT"
+}

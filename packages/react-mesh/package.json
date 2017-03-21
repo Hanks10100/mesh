@@ -1,0 +1,23 @@
+{
+  "name": "react-mesh",
+  "version": "0.2.0",
+  "description": "React mesh component",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Hanks10100/weex-component-mesh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hanks10100/weex-component-mesh/issues"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "mesh"
+  ],
+  "author": "Hanks <zhanghan.me@gmail.com>",
+  "license": "MIT"
+}
