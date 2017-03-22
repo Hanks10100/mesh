@@ -16,26 +16,25 @@ const configs = {
   'react-mesh': {
     moduleName: 'ReactMeshComponent',
     entry: absolute('src/entries/react.js'),
-    dest: absolute('packages/react-mesh/index.js')
+    dest: absolute('packages/react-mesh/index.js'),
+    globals: { react: 'React' },
+    external: ['react']
   }
 }
 
 function getConfig (name, minify) {
   const opt = configs[name]
-  if (opt) {
-    return {
-      moduleName: opt.moduleName,
-      entry: opt.entry,
-      dest: minify ? opt.dest.replace(/\.js$/, '.min.js') : opt.dest,
-      format: 'umd',
-      plugins: [
-        replace({
-          'process.env.NODE_ENV': JSON.stringify(minify ? 'production' : 'development')
-        }),
-        buble()
-      ]
-    }
-  }
+  if (!opt) return null
+  return Object.assign({}, opt, {
+    dest: minify ? opt.dest.replace(/\.js$/, '.min.js') : opt.dest,
+    format: 'umd',
+    plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify(minify ? 'production' : 'development')
+      }),
+      buble()
+    ]
+  })
 }
 
 // get the absolute path
