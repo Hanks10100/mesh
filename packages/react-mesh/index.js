@@ -1,14 +1,16 @@
 /**
  * react-mesh v0.3.0
  * Author: Hanks <zhanghan.me@gmail.com>
- * Build: 2017-03-21 20:20
+ * Build: 2017-03-22 15:29
  */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.ReactMeshComponent = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
+	typeof define === 'function' && define.amd ? define(['react'], factory) :
+	(global.ReactMeshComponent = factory(global.React));
+}(this, (function (React) { 'use strict';
+
+React = 'default' in React ? React['default'] : React;
 
 function isEqual (pa, pb) {
   return pa[0] === pb[0] && pa[1] === pb[1]
@@ -81,6 +83,37 @@ function parseLayout (layout) {
   return Array.isArray(layout) ? layout : []
 }
 
+function defaultPicker (vnode, attr) {
+  var attrs = vnode.data.attrs;
+  if (attrs && attrs[attr]) {
+    return attrs[attr]
+  }
+  return null
+}
+
+function parseOrders (props, children, picker) {
+  if ( picker === void 0 ) picker = defaultPicker;
+
+  if (!Array.isArray(children)) { return }
+
+  var orders = Array.isArray(props.orders) ? props.orders : [];
+
+  if (typeof props.orders === 'string') {
+    orders = props.orders.split(/\s*\,\s*/).map(Number);
+  }
+
+  children.reduce(function (index, vnode, i) {
+    var prop = picker(vnode, 'mesh-order') || picker(vnode, 'meshOrder');
+    var order = Number(prop) || (index + 1);
+    if (prop || !orders[i]) {
+      orders.splice(i, 1, order);
+    }
+    return order
+  }, 0);
+
+  return orders
+}
+
 function getMeshStyle (props, _orders) {
   var width = Number(props.width) || 750;
   var column = Number(props.column) || 12;
@@ -107,10 +140,54 @@ function getMeshStyle (props, _orders) {
   }
 }
 
-var react = {
-  getMeshStyle: getMeshStyle
+function picker (vnode, attr) {
+  var props = vnode.props;
+  if (props && props[attr]) {
+    return props[attr]
+  }
+  return null
+}
+
+function ReactMeshComponent (props) {
+  var orders = parseOrders(props, props.children, picker);
+  var ref = getMeshStyle(props, orders);
+  var wrapperStyle = ref.wrapperStyle;
+  var layoutStyle = ref.layoutStyle;
+  return React.createElement(
+    'div',
+    { style: Object.assign({}, props.style, wrapperStyle) },
+    React.Children.map(props.children, function (vnode, i) {
+      var props = {
+        style: Object.assign({}, vnode.props.style, layoutStyle[i])
+      };
+
+      // support nested mesh
+      if (vnode.type === ReactMeshComponent) {
+        props.width = parseFloat(layoutStyle[i].width);
+      }
+
+      return React.cloneElement(vnode, props)
+    })
+  )
+}
+
+var ref = React.PropTypes;
+var arrayOf = ref.arrayOf;
+var number = ref.number;
+var oneOfType = ref.oneOfType;
+var string = ref.string;
+ReactMeshComponent.propTypes = {
+  width: oneOfType([number, string]),
+  column: oneOfType([number, string]),
+  gap: oneOfType([number, string]),
+  orders: oneOfType([arrayOf(number), string]),
+  layout: oneOfType([arrayOf(arrayOf(number)), string]).isRequired
 };
 
-return react;
+ReactMeshComponent.defaultProps = {
+  layout: []
+};
+
+return ReactMeshComponent;
 
 })));
