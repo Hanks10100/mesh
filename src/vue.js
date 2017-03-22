@@ -1,4 +1,4 @@
-import { parseOrders, getMeshStyle } from '../parser'
+import { parseOrders, getMeshStyle } from './parser'
 
 // filter empty vnode
 function filterChildren (children) {

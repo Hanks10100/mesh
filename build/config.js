@@ -5,17 +5,17 @@ const buble = require('rollup-plugin-buble')
 const configs = {
   'weex-component-mesh': {
     moduleName: 'WeexMeshComponent',
-    entry: absolute('src/entries/vue.js'),
+    entry: absolute('src/vue.js'),
     dest: absolute('index.js')
   },
   'vue-mesh': {
     moduleName: 'VueMeshComponent',
-    entry: absolute('src/entries/vue.js'),
+    entry: absolute('src/vue.js'),
     dest: absolute('packages/vue-mesh/index.js')
   },
   'react-mesh': {
     moduleName: 'ReactMeshComponent',
-    entry: absolute('src/entries/react.js'),
+    entry: absolute('src/react.js'),
     dest: absolute('packages/react-mesh/index.js'),
     globals: { react: 'React' },
     external: ['react']

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import plugin from '../../src/entries/vue'
+import plugin from '../src/vue'
 
 describe('vue component', () => {
   it('exports', () => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { parseOrders, getMeshStyle } from '../parser'
+import { parseOrders, getMeshStyle } from './parser'
 
 function picker (vnode, attr) {
   const props = vnode.props
