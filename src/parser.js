@@ -16,6 +16,35 @@ export function parseLayout (layout) {
   return Array.isArray(layout) ? layout : []
 }
 
+function defaultPicker (vnode, attr) {
+  const attrs = vnode.data.attrs
+  if (attrs && attrs[attr]) {
+    return attrs[attr]
+  }
+  return null
+}
+
+export function parseOrders (props, children, picker = defaultPicker) {
+  if (!Array.isArray(children)) return
+
+  let orders = Array.isArray(props.orders) ? props.orders : []
+
+  if (typeof props.orders === 'string') {
+    orders = props.orders.split(/\s*\,\s*/).map(Number)
+  }
+
+  children.reduce((index, vnode, i) => {
+    const prop = picker(vnode, 'mesh-order') || picker(vnode, 'meshOrder')
+    const order = Number(prop) || (index + 1)
+    if (prop || !orders[i]) {
+      orders.splice(i, 1, order)
+    }
+    return order
+  }, 0)
+
+  return orders
+}
+
 export function getMeshStyle (props, _orders) {
   const width = Number(props.width) || 750
   const column = Number(props.column) || 12
