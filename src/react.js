@@ -10,8 +10,7 @@ function picker (vnode, attr) {
 }
 
 export default function ReactMeshComponent (props) {
-  const orders = parseOrders(props, props.children, picker)
-  const { wrapperStyle, layoutStyle } = getMeshStyle(props, orders)
+  const { wrapperStyle, layoutStyle } = getMeshStyle(props, parseChildren(props, props.children, picker))
   return React.createElement(
     'div',
     { style: Object.assign({}, props.style, wrapperStyle) },

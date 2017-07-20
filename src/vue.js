@@ -1,4 +1,4 @@
-import { parseOrders, getMeshStyle } from './parser'
+import { parseChildren, getMeshStyle } from './parser'
 
 // filter empty vnode
 function filterChildren (children) {
@@ -24,7 +24,7 @@ function install (Vue) {
 
     render (createElement) {
       const children = filterChildren(this.$slots.default)
-      const { wrapperStyle, layoutStyle } = getMeshStyle(this, parseOrders(this, children))
+      const { wrapperStyle, layoutStyle } = getMeshStyle(this, parseChildren(this, children))
       return createElement(
         'div',
         { staticStyle: wrapperStyle },

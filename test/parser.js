@@ -143,7 +143,7 @@ describe('parser', () => {
     })
 
     it('example 3 (with orders)', () => {
-      expect(getMeshStyle({ width: 600, gap: 25, column: 4, layout: '4,1|1,3|3,3' }, [2,1,3])).to.deep.equal({
+      expect(getMeshStyle({ width: 600, gap: 25, column: 4, layout: '4,1|1,3|3,3' }, { orders: [2,1,3] })).to.deep.equal({
         wrapperStyle: {
           position: 'relative',
           width: 600,
@@ -172,7 +172,7 @@ describe('parser', () => {
     })
 
     it('example 4 (with orders)', () => {
-      expect(getMeshStyle({ width: 640, gap: 20, column: 3, layout: '2,1|1,2|2,1' }, [3,1,2])).to.deep.equal({
+      expect(getMeshStyle({ width: 640, gap: 20, column: 3, layout: '2,1|1,2|2,1' }, { orders: [3,1,2] })).to.deep.equal({
         wrapperStyle: {
           position: 'relative',
           width: 640,

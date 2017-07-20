@@ -8,10 +8,14 @@ export function unit (number) {
   return number + 'px'
 }
 
+function parsePair (pair) {
+  return pair.split(/\s*\,\s*/).map(Number)
+}
+
 // parse string layout param
 export function parseLayout (layout) {
   if (typeof layout === 'string') {
-    return layout.split(/\s*\|\s*/).map(pair => pair.split(/\s*\,\s*/).map(Number))
+    return layout.split(/\s*\|\s*/).map(parsePair)
   }
   return Array.isArray(layout) ? layout : []
 }
@@ -24,32 +28,41 @@ function defaultPicker (vnode, attr) {
   return null
 }
 
-export function parseOrders (props, children, picker = defaultPicker) {
+export function parseChildren (props, children, picker = defaultPicker) {
   if (!Array.isArray(children)) return
 
   let orders = Array.isArray(props.orders) ? props.orders : []
+  let offsets = Array.isArray(props.offsets) ? props.offsets : []
 
   if (typeof props.orders === 'string') {
-    orders = props.orders.split(/\s*\,\s*/).map(Number)
+    orders = parsePair(props.orders)
+  }
+  if (typeof props.offsets === 'string') {
+    offsets = parseLayout(props.offsets)
   }
 
   children.reduce((index, vnode, i) => {
-    const prop = picker(vnode, 'mesh-order') || picker(vnode, 'meshOrder')
-    const order = Number(prop) || (index + 1)
-    if (prop || !orders[i]) {
+    const orderProp = picker(vnode, 'mesh-order') || picker(vnode, 'meshOrder')
+    const offsetProp = picker(vnode, 'mesh-offset') || picker(vnode, 'meshOffset')
+    const order = Number(orderProp) || (index + 1)
+    if (orderProp || !orders[i]) {
       orders.splice(i, 1, order)
+    }
+    if (offsetProp || !offsets[i]) {
+      offsets.splice(i, 1, parsePair(offsetProp || '0,0'))
     }
     return order
   }, 0)
 
-  return orders
+  return { orders, offsets }
 }
 
-export function getMeshStyle (props, _orders) {
+export function getMeshStyle (props, childrenProps = {}) {
   const width = Number(props.width) || 750
   const column = Number(props.column) || 12
   const layout = parseLayout(props.layout || [])
-  const orders = _orders || layout.map((_, i) => i + 1)
+  const orders = childrenProps.orders || layout.map((_, i) => i + 1)
+  const offsets = childrenProps.offsets || layout.map((_) => [0, 0])
   const gap = Number(props.gap) || 0
 
   const ratio = (width + gap) / column
@@ -63,8 +76,8 @@ export function getMeshStyle (props, _orders) {
     },
     layoutStyle: orders.map(i => ({
       position: 'absolute',
-      top: unit(origins[i-1][1] * ratio),
-      left: unit(origins[i-1][0] * ratio),
+      top: unit((origins[i-1][1] + offsets[i-1][1]) * ratio),
+      left: unit((origins[i-1][0] + offsets[i-1][0]) * ratio),
       width: unit(layout[i-1][0] * ratio - gap),
       height: unit(layout[i-1][1] * ratio - gap)
     }))
