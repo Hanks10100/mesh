@@ -35,6 +35,7 @@ ReactMeshComponent.propTypes = {
   column: oneOfType([number, string]),
   gap: oneOfType([number, string]),
   orders: oneOfType([arrayOf(number), string]),
+  offsets: oneOfType([arrayOf(arrayOf(number)), string]),
   layout: oneOfType([arrayOf(arrayOf(number)), string]).isRequired
 }
 

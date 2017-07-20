@@ -15,6 +15,7 @@ function install (Vue) {
       column: [Number, String], // default 12
       gap: [Number, String], // default 0
       orders: [Array, String],
+      offsets: [Array, String],
       layout: {
         type: [Array, String],
         required: true,
