@@ -57,147 +57,141 @@ describe('parser', () => {
     after(() => { delete global.WXEnvironment })
 
     it('empty parameter', () => {
-      expect(getMeshStyle({})).to.deep.equal({
-        wrapperStyle: {
-          position: 'relative',
-          width: 750,
-          height: 0
-        },
-        layoutStyle: []
+      const { wrapperStyle, layoutStyle } = getMeshStyle({})
+      expect(wrapperStyle).to.deep.equal({
+        position: 'relative',
+        width: 750,
+        height: 0
       })
+      expect(layoutStyle).to.deep.equal([])
     })
 
     it('default parameter', () => {
-      expect(getMeshStyle({ layout: '12,10' })).to.deep.equal({
-        wrapperStyle: {
-          position: 'relative',
-          width: 750,
-          height: 625
-        },
-        layoutStyle: [{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 750,
-          height: 625
-        }]
+      const { wrapperStyle, layoutStyle } = getMeshStyle({ layout: '12,10' })
+      expect(wrapperStyle).to.deep.equal({
+        position: 'relative',
+        width: 750,
+        height: 625
       })
+      expect(layoutStyle).to.deep.equal([{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 750,
+        height: 625
+      }])
     })
 
     it('example 1', () => {
-      expect(getMeshStyle({ width: 600, gap: 25, column: 4, layout: '4,1|1,3|3,3' })).to.deep.equal({
-        wrapperStyle: {
-          position: 'relative',
-          width: 600,
-          height: 600
-        },
-        layoutStyle: [{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 600,
-          height: 131.25
-        }, {
-          position: 'absolute',
-          top: 156.25,
-          left: 0,
-          width: 131.25,
-          height: 443.75
-        }, {
-          position: 'absolute',
-          top: 156.25,
-          left: 156.25,
-          width: 443.75,
-          height: 443.75
-        }]
+      const { wrapperStyle, layoutStyle } = getMeshStyle({ width: 600, gap: 25, column: 4, layout: '4,1|1,3|3,3' })
+      expect(wrapperStyle).to.deep.equal({
+        position: 'relative',
+        width: 600,
+        height: 600
       })
+      expect(layoutStyle).to.deep.equal([{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 600,
+        height: 131.25
+      }, {
+        position: 'absolute',
+        top: 156.25,
+        left: 0,
+        width: 131.25,
+        height: 443.75
+      }, {
+        position: 'absolute',
+        top: 156.25,
+        left: 156.25,
+        width: 443.75,
+        height: 443.75
+      }])
     })
 
     it('example 2', () => {
-      expect(getMeshStyle({ width: 640, gap: 20, column: 3, layout: '2,1|1,2|2,1' })).to.deep.equal({
-        wrapperStyle: {
-          position: 'relative',
-          width: 640,
-          height: 420
-        },
-        layoutStyle: [{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 420,
-          height: 200
-        }, {
-          position: 'absolute',
-          top: 0,
-          left: 440,
-          width: 200,
-          height: 420
-        }, {
-          position: 'absolute',
-          top: 220,
-          left: 0,
-          width: 420,
-          height: 200
-        }]
+      const { wrapperStyle, layoutStyle } = getMeshStyle({ width: 640, gap: 20, column: 3, layout: '2,1|1,2|2,1' })
+      expect(wrapperStyle).to.deep.equal({
+        position: 'relative',
+        width: 640,
+        height: 420
       })
+      expect(layoutStyle).to.deep.equal([{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 420,
+        height: 200
+      }, {
+        position: 'absolute',
+        top: 0,
+        left: 440,
+        width: 200,
+        height: 420
+      }, {
+        position: 'absolute',
+        top: 220,
+        left: 0,
+        width: 420,
+        height: 200
+      }])
     })
 
     it('example 3 (with orders)', () => {
-      expect(getMeshStyle({ width: 600, gap: 25, column: 4, layout: '4,1|1,3|3,3' }, { orders: [2,1,3] })).to.deep.equal({
-        wrapperStyle: {
-          position: 'relative',
-          width: 600,
-          height: 600
-        },
-        layoutStyle: [{
-          position: 'absolute',
-          top: 156.25,
-          left: 0,
-          width: 131.25,
-          height: 443.75
-        }, {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 600,
-          height: 131.25
-        }, {
-          position: 'absolute',
-          top: 156.25,
-          left: 156.25,
-          width: 443.75,
-          height: 443.75
-        }]
+      const { wrapperStyle, layoutStyle } = getMeshStyle({ width: 600, gap: 25, column: 4, layout: '4,1|1,3|3,3' }, { orders: [2,1,3] })
+      expect(wrapperStyle).to.deep.equal({
+        position: 'relative',
+        width: 600,
+        height: 600
       })
+      expect(layoutStyle).to.deep.equal([{
+        position: 'absolute',
+        top: 156.25,
+        left: 0,
+        width: 131.25,
+        height: 443.75
+      }, {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 600,
+        height: 131.25
+      }, {
+        position: 'absolute',
+        top: 156.25,
+        left: 156.25,
+        width: 443.75,
+        height: 443.75
+      }])
     })
 
     it('example 4 (with orders)', () => {
-      expect(getMeshStyle({ width: 640, gap: 20, column: 3, layout: '2,1|1,2|2,1' }, { orders: [3,1,2] })).to.deep.equal({
-        wrapperStyle: {
-          position: 'relative',
-          width: 640,
-          height: 420
-        },
-        layoutStyle: [{
-          position: 'absolute',
-          top: 220,
-          left: 0,
-          width: 420,
-          height: 200
-        }, {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 420,
-          height: 200
-        }, {
-          position: 'absolute',
-          top: 0,
-          left: 440,
-          width: 200,
-          height: 420
-        }]
+      const { wrapperStyle, layoutStyle } = getMeshStyle({ width: 640, gap: 20, column: 3, layout: '2,1|1,2|2,1' }, { orders: [3,1,2] })
+      expect(wrapperStyle).to.deep.equal({
+        position: 'relative',
+        width: 640,
+        height: 420
       })
+      expect(layoutStyle).to.deep.equal([{
+        position: 'absolute',
+        top: 220,
+        left: 0,
+        width: 420,
+        height: 200
+      }, {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 420,
+        height: 200
+      }, {
+        position: 'absolute',
+        top: 0,
+        left: 440,
+        width: 200,
+        height: 420
+      }])
     })
   })
 })
