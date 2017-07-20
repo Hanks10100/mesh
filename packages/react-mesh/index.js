@@ -1,7 +1,7 @@
 /**
- * react-mesh v0.3.0
+ * react-mesh v0.4.0
  * Author: Hanks <zhanghan.me@gmail.com>
- * Build: 2017-03-22 15:29
+ * Build: 2017-07-21 00:30
  */
 
 (function (global, factory) {
@@ -75,50 +75,28 @@ function unit (number) {
   return number + 'px'
 }
 
+function parsePair (pair) {
+  return pair.split(/\s*\,\s*/).map(Number)
+}
+
 // parse string layout param
 function parseLayout (layout) {
   if (typeof layout === 'string') {
-    return layout.split(/\s*\|\s*/).map(function (pair) { return pair.split(/\s*\,\s*/).map(Number); })
+    return layout.split(/\s*\|\s*/).map(parsePair)
   }
   return Array.isArray(layout) ? layout : []
 }
 
-function defaultPicker (vnode, attr) {
-  var attrs = vnode.data.attrs;
-  if (attrs && attrs[attr]) {
-    return attrs[attr]
-  }
-  return null
-}
 
-function parseOrders (props, children, picker) {
-  if ( picker === void 0 ) picker = defaultPicker;
 
-  if (!Array.isArray(children)) { return }
+function getMeshStyle (props, childrenProps) {
+  if ( childrenProps === void 0 ) childrenProps = {};
 
-  var orders = Array.isArray(props.orders) ? props.orders : [];
-
-  if (typeof props.orders === 'string') {
-    orders = props.orders.split(/\s*\,\s*/).map(Number);
-  }
-
-  children.reduce(function (index, vnode, i) {
-    var prop = picker(vnode, 'mesh-order') || picker(vnode, 'meshOrder');
-    var order = Number(prop) || (index + 1);
-    if (prop || !orders[i]) {
-      orders.splice(i, 1, order);
-    }
-    return order
-  }, 0);
-
-  return orders
-}
-
-function getMeshStyle (props, _orders) {
   var width = Number(props.width) || 750;
   var column = Number(props.column) || 12;
   var layout = parseLayout(props.layout || []);
-  var orders = _orders || layout.map(function (_, i) { return i + 1; });
+  var orders = childrenProps.orders || layout.map(function (_, i) { return i + 1; });
+  var offsets = childrenProps.offsets || layout.map(function (_) { return [0, 0]; });
   var gap = Number(props.gap) || 0;
 
   var ratio = (width + gap) / column;
@@ -132,8 +110,8 @@ function getMeshStyle (props, _orders) {
     },
     layoutStyle: orders.map(function (i) { return ({
       position: 'absolute',
-      top: unit(origins[i-1][1] * ratio),
-      left: unit(origins[i-1][0] * ratio),
+      top: unit((origins[i-1][1] + offsets[i-1][1]) * ratio),
+      left: unit((origins[i-1][0] + offsets[i-1][0]) * ratio),
       width: unit(layout[i-1][0] * ratio - gap),
       height: unit(layout[i-1][1] * ratio - gap)
     }); })
@@ -149,8 +127,7 @@ function picker (vnode, attr) {
 }
 
 function ReactMeshComponent (props) {
-  var orders = parseOrders(props, props.children, picker);
-  var ref = getMeshStyle(props, orders);
+  var ref = getMeshStyle(props, parseChildren(props, props.children, picker));
   var wrapperStyle = ref.wrapperStyle;
   var layoutStyle = ref.layoutStyle;
   return React.createElement(
@@ -181,6 +158,7 @@ ReactMeshComponent.propTypes = {
   column: oneOfType([number, string]),
   gap: oneOfType([number, string]),
   orders: oneOfType([arrayOf(number), string]),
+  offsets: oneOfType([arrayOf(arrayOf(number)), string]),
   layout: oneOfType([arrayOf(arrayOf(number)), string]).isRequired
 };
 

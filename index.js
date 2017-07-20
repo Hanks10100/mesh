@@ -1,7 +1,7 @@
 /**
- * weex-component-mesh v0.3.0
+ * weex-component-mesh v0.4.0
  * Author: Hanks <zhanghan.me@gmail.com>
- * Build: 2017-03-21 20:19
+ * Build: 2017-07-21 00:30
  */
 
 (function (global, factory) {
@@ -73,19 +73,65 @@ function unit (number) {
   return number + 'px'
 }
 
+function parsePair (pair) {
+  return pair.split(/\s*\,\s*/).map(Number)
+}
+
 // parse string layout param
 function parseLayout (layout) {
   if (typeof layout === 'string') {
-    return layout.split(/\s*\|\s*/).map(function (pair) { return pair.split(/\s*\,\s*/).map(Number); })
+    return layout.split(/\s*\|\s*/).map(parsePair)
   }
   return Array.isArray(layout) ? layout : []
 }
 
-function getMeshStyle (props, _orders) {
+function defaultPicker (vnode, attr) {
+  var attrs = vnode.data.attrs;
+  if (attrs && attrs[attr]) {
+    return attrs[attr]
+  }
+  return null
+}
+
+function parseChildren (props, children, picker) {
+  if ( picker === void 0 ) picker = defaultPicker;
+
+  if (!Array.isArray(children)) { return }
+
+  var orders = Array.isArray(props.orders) ? props.orders : [];
+  var offsets = Array.isArray(props.offsets) ? props.offsets : [];
+
+  if (typeof props.orders === 'string') {
+    orders = parsePair(props.orders);
+  }
+  if (typeof props.offsets === 'string') {
+    offsets = parseLayout(props.offsets);
+  }
+
+  children.reduce(function (index, vnode, i) {
+    var orderProp = picker(vnode, 'mesh-order') || picker(vnode, 'meshOrder');
+    var offsetProp = picker(vnode, 'mesh-offset') || picker(vnode, 'meshOffset');
+    var order = Number(orderProp) || (index + 1);
+    if (orderProp || !orders[i]) {
+      orders.splice(i, 1, order);
+    }
+    if (offsetProp || !offsets[i]) {
+      offsets.splice(i, 1, parsePair(offsetProp || '0,0'));
+    }
+    return order
+  }, 0);
+
+  return { orders: orders, offsets: offsets }
+}
+
+function getMeshStyle (props, childrenProps) {
+  if ( childrenProps === void 0 ) childrenProps = {};
+
   var width = Number(props.width) || 750;
   var column = Number(props.column) || 12;
   var layout = parseLayout(props.layout || []);
-  var orders = _orders || layout.map(function (_, i) { return i + 1; });
+  var orders = childrenProps.orders || layout.map(function (_, i) { return i + 1; });
+  var offsets = childrenProps.offsets || layout.map(function (_) { return [0, 0]; });
   var gap = Number(props.gap) || 0;
 
   var ratio = (width + gap) / column;
@@ -99,8 +145,8 @@ function getMeshStyle (props, _orders) {
     },
     layoutStyle: orders.map(function (i) { return ({
       position: 'absolute',
-      top: unit(origins[i-1][1] * ratio),
-      left: unit(origins[i-1][0] * ratio),
+      top: unit((origins[i-1][1] + offsets[i-1][1]) * ratio),
+      left: unit((origins[i-1][0] + offsets[i-1][0]) * ratio),
       width: unit(layout[i-1][0] * ratio - gap),
       height: unit(layout[i-1][1] * ratio - gap)
     }); })
@@ -115,35 +161,6 @@ function filterChildren (children) {
   return []
 }
 
-function pick (vnode, attr) {
-  var attrs = vnode.data.attrs;
-  if (attrs && attrs[attr]) {
-    return attrs[attr]
-  }
-  return null
-}
-
-function parseOrders (props, children) {
-  if (!Array.isArray(children)) { return }
-
-  var orders = Array.isArray(props.orders) ? props.orders : [];
-
-  if (typeof props.orders === 'string') {
-    orders = props.orders.split(/\s*\,\s*/).map(Number);
-  }
-
-  children.reduce(function (index, vnode, i) {
-    var prop = pick(vnode, 'mesh-order') || pick(vnode, 'meshOrder');
-    var order = Number(prop) || (index + 1);
-    if (prop || !orders[i]) {
-      orders.splice(i, 1, order);
-    }
-    return order
-  }, 0);
-
-  return orders
-}
-
 function install (Vue) {
   Vue.component('mesh', {
     props: {
@@ -151,6 +168,7 @@ function install (Vue) {
       column: [Number, String], // default 12
       gap: [Number, String], // default 0
       orders: [Array, String],
+      offsets: [Array, String],
       layout: {
         type: [Array, String],
         required: true,
@@ -160,7 +178,7 @@ function install (Vue) {
 
     render: function render (createElement) {
       var children = filterChildren(this.$slots.default);
-      var ref = getMeshStyle(this, parseOrders(this, children));
+      var ref = getMeshStyle(this, parseChildren(this, children));
       var wrapperStyle = ref.wrapperStyle;
       var layoutStyle = ref.layoutStyle;
       return createElement(
